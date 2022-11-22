@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace String_Formatter
+namespace String_Formatter.Services
 {
 	public class StringValidator : IStringValidator
 	{

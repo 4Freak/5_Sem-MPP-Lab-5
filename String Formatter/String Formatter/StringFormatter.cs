@@ -1,6 +1,8 @@
 ﻿using String_Formatter.Entities;
 using String_Formatter.Interfaces;
+using String_Formatter.Services;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,24 +15,32 @@ namespace String_Formatter
 		public static readonly StringFormatter Shared = new StringFormatter();
 		
 		private readonly StringValidator _validator;
+		private readonly ExpressionCashe _cashe;
 
 
 		public StringFormatter() 
 		{
 			_validator = new StringValidator();	
+			_cashe = new ExpressionCashe();
 		}
 
 		public string Format (string template, object target)
 		{
-			var idInfos = _validator.IsValid(template);
+			List<IdentifierInfo> idInfos = _validator.IsValid(template);
+			if (idInfos.Count == 0)
+			{
+				return template;
+			}
 
-			var resultStr = Parse(idInfos, target);
+			var resultStr = Parse(template, idInfos, target);
 			return resultStr;
 		}
 
-		private string Parse(List<IdentifierInfo> idInfos, object target)
+		private string Parse(string template, List<IdentifierInfo> idInfos, object target)
 		{
-			return "";
+			var result = new StringBuilder(template);
+			
+			return result.ToString();
 		}
 	}
 }

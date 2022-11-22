@@ -1,6 +1,7 @@
+using System.ComponentModel.DataAnnotations;
 using String_Formatter;
 using String_Formatter.Interfaces;
-using System.ComponentModel.DataAnnotations;
+using String_Formatter.Services;
 
 namespace Tests
 {
