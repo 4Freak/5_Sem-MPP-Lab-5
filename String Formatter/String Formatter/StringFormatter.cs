@@ -178,7 +178,18 @@ namespace String_Formatter
 		private static Boolean State31(char item, ParserData parserData) 
 		{
 			// TODO: change to cahse
-			parserData.Result.Append(parserData.IdentifierName + "4");
+			//parserData.Result.Append(parserData.IdentifierName + "4");
+
+			var resultStr = parserData.Cashe.ReadCashe(parserData.IdentifierName.ToString(), parserData.Target);
+			if (resultStr == null)
+			{
+				try
+				{
+					resultStr = parserData.Cashe.TryWriteCashe(parserData.IdentifierName.ToString(), parserData.Target);
+				}
+				catch(Exception ex){ }
+			}
+			parserData.Result.Append(resultStr);
 			parserData.CloseBracketsCount++;
 			return true; 
 		}

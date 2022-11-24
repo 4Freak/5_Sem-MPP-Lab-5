@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using String_Formatter;
+using String_Formatter.Entities;
 using String_Formatter.Interfaces;
 using String_Formatter.Services;
 
@@ -16,15 +17,18 @@ namespace Tests
 		[Test]
 		public void stringFormatterTest ()
 		{
-			var stringFormatter = new StringFormatter();
-			var obj = new Object();
+			var cashe = new ExpressionCashe();
+			var stringFormatter = new StringFormatter(cashe);
+
+			var obj = new ParserData(cashe, "You can read this", cashe);
+			
 			var ids = stringFormatter.Format("string", obj);
-			ids = stringFormatter.Format("{id}", obj);
-			ids = stringFormatter.Format("SomeText {id} some text", obj);
-			ids = stringFormatter.Format("SomeText {id} some text {_id2}", obj);
-			ids = stringFormatter.Format("{{CorrectId}}", obj);
-			ids = stringFormatter.Format("{{{CorrectId}}}", obj);
-			ids = stringFormatter.Format("Some text {{0InCorrectId}}", obj);
+			ids = stringFormatter.Format("{Template}", obj);
+			ids = stringFormatter.Format("SomeText {Template} some text", obj);
+			ids = stringFormatter.Format("SomeText {Template} some text {Template}", obj);
+			ids = stringFormatter.Format("{{Template}}", obj);
+			ids = stringFormatter.Format("{{{Template}}}", obj);
+			ids = stringFormatter.Format("Some text {{0Template}}", obj);
 			int catchCount = 0, tryCounts = 0;
 			try
 			{
