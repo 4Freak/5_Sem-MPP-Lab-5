@@ -19,7 +19,7 @@ namespace String_Formatter.Services
 			_cashe = new ConcurrentDictionary<string, Func<object, string>>();
 		}
 
-		public string? ReadCashe (string propertyOrFieldName, object target)
+		public virtual string? ReadCashe (string propertyOrFieldName, object target)
 		{
 			var keyStr = $"{target.GetType()}.{propertyOrFieldName}";
 			Func<object, string>? func;
@@ -30,7 +30,7 @@ namespace String_Formatter.Services
 			return null;
 		}
 
-		public string? TryWriteCashe (string propertyOrFieldName, object target)
+		public virtual string? TryWriteCashe (string propertyOrFieldName, object target)
 		{
 			var targetProperties = target.GetType().GetProperties();
 			var targetFields = target.GetType().GetFields();
