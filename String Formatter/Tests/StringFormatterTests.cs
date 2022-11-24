@@ -10,37 +10,41 @@ namespace Tests
 		[SetUp]
 		public void Setup ()
 		{
+			
 		}
 
 		[Test]
-		public void StringValidatorTest ()
+		public void stringFormatterTest ()
 		{
-			var stringValidator = new StringValidator();
-			var ids = stringValidator.IsValid("string");
-			ids = stringValidator.IsValid("{id}");
-			ids = stringValidator.IsValid("SomeText {id} some text");
-			ids = stringValidator.IsValid("SomeText {id} some text {_id2}");
-			ids = stringValidator.IsValid("{{CorrectId}}");
+			var stringFormatter = new StringFormatter();
+			var obj = new Object();
+			var ids = stringFormatter.Format("string", obj);
+			ids = stringFormatter.Format("{id}", obj);
+			ids = stringFormatter.Format("SomeText {id} some text", obj);
+			ids = stringFormatter.Format("SomeText {id} some text {_id2}", obj);
+			ids = stringFormatter.Format("{{CorrectId}}", obj);
+			ids = stringFormatter.Format("{{{CorrectId}}}", obj);
+			ids = stringFormatter.Format("Some text {{0InCorrectId}}", obj);
+			int catchCount = 0, tryCounts = 0;
 			try
 			{
-				ids = stringValidator.IsValid("Some text {{0InCorrectId}}");
+				tryCounts++;
+				ids = stringFormatter.Format("}{", obj);
 			}
-			catch{ };
+			catch {catchCount++; };
 			try
 			{
-				ids = stringValidator.IsValid("}{");
+				tryCounts++;
+				ids = stringFormatter.Format("{{", obj);
 			}
-			catch{ };
+			catch {catchCount++; }
 			try
 			{
-				ids = stringValidator.IsValid("{{");
+				tryCounts++;
+				ids = stringFormatter.Format("}", obj);
 			}
-			catch{ }
-			try
-			{ 
-				ids = stringValidator.IsValid("}");
-			}
-			catch{ } 
+			catch {catchCount++; }
+			Assert.That(catchCount, Is.EqualTo(tryCounts));
 			Assert.Pass();
 		}
 	}

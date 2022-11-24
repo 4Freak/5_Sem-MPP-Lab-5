@@ -9,5 +9,6 @@ namespace String_Formatter.Interfaces
 	public interface IStringFormatter
 	{
 		string Format(string template, object target);
+		string Parse(string template, object target);
 	}
 }
