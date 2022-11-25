@@ -15,10 +15,13 @@ namespace Tests
 	{
 		public int ReadAttemptsCount {get; private set;}
 		public int SuccessReadCount {get; private set;}
-		public int WriteCount {get; private set;}
+		public int WriteAttemptsCount {get; private set;}
+
+		private object LockObject;
 
 		public TestExpressionCashe() : base()
 		{
+			LockObject = new object();
 			ResetCounters();
 		}
 
@@ -26,23 +29,32 @@ namespace Tests
 		{
 			ReadAttemptsCount = 0;
 			SuccessReadCount = 0;
-			WriteCount = 0;
+			WriteAttemptsCount = 0;
 		}
 
 		public override string? ReadCashe (string propertyOrFieldName, object target)
 		{
-			ReadAttemptsCount++;
-			var result = base.ReadCashe (propertyOrFieldName, target); 
-			if (result != null)
+			lock (LockObject)
 			{
-				SuccessReadCount++;
+				ReadAttemptsCount++;
 			}
-			return result;
+				var result = base.ReadCashe (propertyOrFieldName, target); 
+				if (result != null)
+				{
+					lock (LockObject)
+					{
+						SuccessReadCount++;
+					}	
+				}
+				return result;
 		}
 
 		public override string? TryWriteCashe (string propertyOrFieldName, object target)
 		{
-			WriteCount++;
+			lock (LockObject)
+			{
+				WriteAttemptsCount++;
+			}
 			var result = base.TryWriteCashe(propertyOrFieldName, target);
 			return result; 
 		}
